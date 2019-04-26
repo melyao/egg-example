@@ -15,15 +15,15 @@ module.exports = appInfo => {
     // 单数据库信息配置
     client: {
       // host
-      host: 'localhost',
+      host: '47.98.250.114',
       // 端口号
       port: '3306',
       // 用户名
-      user: 'root',
+      user: 'debian-sys-maint',
       // 密码
-      password: '123456',
+      password: 'Mmel1325',
       // 数据库名
-      database: 'test_database',
+      database: 'jingjing',
     },
     // 是否加载到 app 上，默认开启
     app: true,

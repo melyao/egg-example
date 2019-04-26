@@ -3,70 +3,61 @@
 const Controller = require('egg').Controller;
 
 class HomeController extends Controller {
-  async index() {
-    const json = {
-      count: 2,
-      data: [{
-        key: 0,
-        todo: 'todo1',
-      }, {
-        key: 1,
-        todo: 'todo2',
-      },
-      ],
+  async getWxUserInfo() {
+    const openid = this.ctx.query.openid;
+    const wx_userinfo = await this.app.mysql.get('wx_info', { openid });
+    const res = {
+      retMsg: '获取成功',
+      retCode: '0000',
+      data: wx_userinfo,
     };
-    this.ctx.body = json;
+    this.ctx.body = res;
   }
-  async list() {
-    const json = {
-      retMsg: '操作成功',
+  async insertWxUserInfo() {
+    const body = this.ctx.request.body;
+    const wx_userinfo = await this.app.mysql.get('wx_info', { openid: body.openid });
+    let result = {};
+    if (wx_userinfo === null || wx_userinfo === undefined) {
+      const res = await this.app.mysql.insert('wx_info', body);
+      if (res.affectedRows === 1) {
+        console.log(res.affectedRows);
+        result = {
+          retMsg: '获取成功',
+          retCode: '0000',
+        };
+      } else {
+        result = {
+          retMsg: '获取失败',
+          retCode: '0001',
+        };
+      }
+    } else {
+      result = {
+        retMsg: '获取失败',
+        retCode: '0001',
+      };
+    }
+    this.ctx.body = result;
+  }
+  async getAlbumList() {
+    const res = {
+      retMsg: '获取成功',
       retCode: '0000',
       result: {
-        memberId: '666945',
-        memberHeadimg: 'http: //thirdwx.qlogo.cn/mmopen/vi_32/uU7mPicNERFAFpTbYkiazgYHA2q6VmPibNYmkDyQCqQ5mGkrzs3vnwvdlAHm2XqBFH8icfVswszibsbZJEKP0COwlTw/132',
-        memberNickname: '孟姑娘\uD83D\uDC83',
-        memberName: 'mel',
-        memberIdcode: null,
-        memberTel: '138****1036',
-        memberPwd: '9186efcbc59df5a56a2178063a6c440b',
-        createTime: 1524561479000,
-        memberScores: 0,
-        status: 1,
-        createSrc: 3,
-        customInfoId: 134871,
-        isSmsChk: null,
-        openid: 'oErwPxOjCyech9jaRedv_EooqyNU',
-        buildingProjectId: null,
-        unionUserId: null,
-        cookieId: null,
-        remember: null,
-        col1: null,
-        col2: null,
-        col3: null,
-        col4: null,
-        col5: null,
-        fingerprint: '31d08b7a7f3d436c81863828f6e67cef',
-        isProprietor: 1,
-        proprietorAuthTime: null,
-        proprietorIdCode: null,
-        memberTelAll: '13896511036',
-        isLogin: true,
-        isNew: 0,
-        longitude: 106.555715,
-        latitude: 29.606374,
-        lastEnterName: '孟瑶',
+        video: [{
+          src: 'http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400',
+          id: 1,
+        }, {
+          src: 'http://wxsnsdy.tc.qq.com/105/20210/snsdyvideodownload?filekey=30280201010421301f0201690402534804102ca905ce620b1241b726bc41dcff44e00204012882540400&bizid=1023&hy=SH&fileparam=302c020101042530230204136ffd93020457e3c4ff02024ef202031e8d7f02030f42400204045a320a0201000400',
+          id: 2,
+        }],
+        img: [
+          { type: 1, name: '效果图', data: [{ src: 'http://172.16.2.130:7001/public/img/pic1.png', id: 1 }, { src: 'http://172.16.2.130:7001/public/img/pic2.png', id: 2 }] },
+          { type: 2, name: '实景图', data: [{ src: 'http://172.16.2.130:7001/public/img/pic1.png', id: 1 }] },
+        ],
       },
     };
-    this.ctx.body = json;
-  }
-  * home() {
-    yield this.ctx.render('wechat/home_demo.ejs', {
-      a: '1',
-      b: '2',
-    });
-  }
-  * other() {
-    yield this.ctx.render('wechat/home_other.ejs');
+    this.ctx.body = res;
   }
 }
 
