@@ -8,7 +8,7 @@ class HomeController extends Controller {
     const wx_userinfo = await this.app.mysql.get('wx_info', { openid });
     const res = {
       retMsg: '获取成功',
-      retCode: '9997',
+      retCode: '0000',
       data: wx_userinfo,
     };
     this.ctx.body = res;

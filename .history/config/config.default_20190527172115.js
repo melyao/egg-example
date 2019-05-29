@@ -21,7 +21,7 @@ module.exports = appInfo => {
       // 用户名
       user: 'root',
       // 密码
-      password: '123456',
+      password: 'Mmel1325',
       // 数据库名
       database: 'test_database',
     },
@@ -47,11 +47,11 @@ module.exports = appInfo => {
     },
   };
   exports.cluster = {
-    // listen: {
-    //   port: 80,
-    //   hostname: '0.0.0.0',
-    //   // path: '/var/run/egg.sock',
-    // },
+    listen: {
+      port: 80,
+      hostname: '0.0.0.0',
+      // path: '/var/run/egg.sock',
+    },
   };
   return config;
 };

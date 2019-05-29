@@ -47,11 +47,11 @@ module.exports = appInfo => {
     },
   };
   exports.cluster = {
-    // listen: {
-    //   port: 80,
-    //   hostname: '0.0.0.0',
-    //   // path: '/var/run/egg.sock',
-    // },
+    listen: {
+      port: 80,
+      hostname: '0.0.0.0',
+      // path: '/var/run/egg.sock',
+    },
   };
   return config;
 };

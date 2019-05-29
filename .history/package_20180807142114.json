@@ -26,7 +26,7 @@
     "node": ">=8.9.0"
   },
   "scripts": {
-    "start": "node index.js",
+    "start": "egg-scripts start --daemon --title=egg-server-egg-test-pro",
     "stop": "egg-scripts stop --title=egg-server-egg-test-pro",
     "dev": "egg-bin dev",
     "debug": "egg-bin debug",
