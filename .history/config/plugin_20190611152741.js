@@ -18,7 +18,3 @@ exports.wechat = {
   enable: true,
   package: 'egg-wechat',
 };
-exports.redis = {
-  enable: true,
-  package: 'egg-redis',
-};

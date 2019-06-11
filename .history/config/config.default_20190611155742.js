@@ -72,6 +72,6 @@ module.exports = appInfo => {
       password: 'mel20192019',
       db: 0,
     },
-  };
+  }
   return config;
 };

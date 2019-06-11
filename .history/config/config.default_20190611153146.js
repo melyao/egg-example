@@ -65,13 +65,5 @@ module.exports = appInfo => {
       pfx: '',
     },
   };
-  config.redis = {
-    client: {
-      port: 6379, // Redis port
-      host: '127.0.0.1', // Redis host
-      password: 'mel20192019',
-      db: 0,
-    },
-  };
   return config;
 };

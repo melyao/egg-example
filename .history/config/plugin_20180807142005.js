@@ -14,11 +14,3 @@ exports.mysql = {
   enable: true,
   package: 'egg-mysql',
 };
-exports.wechat = {
-  enable: true,
-  package: 'egg-wechat',
-};
-exports.redis = {
-  enable: true,
-  package: 'egg-redis',
-};

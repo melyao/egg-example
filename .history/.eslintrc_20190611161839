@@ -9,7 +9,6 @@
     "spaced-comment": 0,
     "keyword-spacing": 0,
     "space-before-function-paren": 0,
-    "quotes": "off",
     "no-unused-vars": 1,
     "comma-dangle": 1,
     "no-extend-native": "off",
