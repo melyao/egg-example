@@ -17,9 +17,11 @@ class LoginController extends Controller {
       const openid = result.data.openid;
       const wx_userinfo = await this.app.mysql.get('wx_info', { openid });
       const userCacheId = ctx.helper.uuid();
+      console.log("2:" + wx_userinfo);
       if (wx_userinfo === null || wx_userinfo === undefined) {
         const info = await this.app.mysql.insert('wx_info', { openid, sessionKey: result.data.sessionKey, unionid: result.data.unionid, userCacheId });
         if (info.affectedRows === 1) {
+          console.log("3: " + info.affectedRows);
           res = {
             userCacheId,
             retMsg: '操作成功',
@@ -32,19 +34,18 @@ class LoginController extends Controller {
           };
         }
       } else {
-        const row = await this.app.mysql.update('wx_info', { userCacheId }, { where: { openid } });
+        const row = await this.app.mysql.update('posts', { userCacheId }, { where: { openid } });
         if (row.affectedRows === 1) {
           res = {
             userCacheId,
             retMsg: '操作成功',
             retCode: '0000',
           };
-        } else {
-          res = {
-            retMsg: '更新userCacheId失败',
-            retCode: '0001',
-          };
         }
+        res = {
+          retMsg: '更新userCacheId失败',
+          retCode: '0001',
+        };
       }
     } else {
       res = {
@@ -53,11 +54,6 @@ class LoginController extends Controller {
       };
     }
     ctx.body = res;
-  }
-  async loginbybindtel() {
-    const body = this.ctx.request.body;
-    console.log(body);
-    this.ctx.body = {};
   }
 }
 module.exports = LoginController;

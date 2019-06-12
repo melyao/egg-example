@@ -4,24 +4,28 @@ const Controller = require('egg').Controller;
 
 class LoginController extends Controller {
   async code2session() {
-    const ctx = this.ctx;
-    const code = ctx.query.code;
+    const code = this.ctx.query.code;
     const { appid, appsecret } = this.config.wechat;
+    //获取access_token
+    // const result = await this.app.curl('https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=' + appid + '&secret=' + appsecret, {
+    //   // 自动解析 JSON response
+    //   dataType: 'json',
+    // });
+    // console.log('token: ' + result.data.access_token);
     const result = await this.app.curl('https://api.weixin.qq.com/sns/jscode2session?appid=' + appid + '&secret=' + appsecret + '&js_code=' + code + '&grant_type=authorization_code', {
       // 自动解析 JSON response
       dataType: 'json',
     });
-    let res = {};
-    // console.log("1:" + JSON.stringify(result));
-    if (result.status === 200) {
+    let res = { };
+    if (result.data.errcode === '0') {
       const openid = result.data.openid;
       const wx_userinfo = await this.app.mysql.get('wx_info', { openid });
-      const userCacheId = ctx.helper.uuid();
+      const userCacheId = this.helper.uuid();
       if (wx_userinfo === null || wx_userinfo === undefined) {
         const info = await this.app.mysql.insert('wx_info', { openid, sessionKey: result.data.sessionKey, unionid: result.data.unionid, userCacheId });
         if (info.affectedRows === 1) {
+          console.log(info.affectedRows);
           res = {
-            userCacheId,
             retMsg: '操作成功',
             retCode: '0000',
           };
@@ -32,19 +36,17 @@ class LoginController extends Controller {
           };
         }
       } else {
-        const row = await this.app.mysql.update('wx_info', { userCacheId }, { where: { openid } });
+        const row = await this.app.mysql.update('posts', { userCacheId }, { where: { openid } });
         if (row.affectedRows === 1) {
           res = {
-            userCacheId,
             retMsg: '操作成功',
             retCode: '0000',
           };
-        } else {
-          res = {
-            retMsg: '更新userCacheId失败',
-            retCode: '0001',
-          };
         }
+        res = {
+          retMsg: '更新userCacheId失败',
+          retCode: '0001',
+        };
       }
     } else {
       res = {
@@ -52,12 +54,7 @@ class LoginController extends Controller {
         retCode: result.data.errcode,
       };
     }
-    ctx.body = res;
-  }
-  async loginbybindtel() {
-    const body = this.ctx.request.body;
-    console.log(body);
-    this.ctx.body = {};
+    this.ctx.body = res;
   }
 }
 module.exports = LoginController;

@@ -33,6 +33,7 @@ class LoginController extends Controller {
         }
       } else {
         const row = await this.app.mysql.update('wx_info', { userCacheId }, { where: { openid } });
+        console.log(JSON.stringify(row));
         if (row.affectedRows === 1) {
           res = {
             userCacheId,
@@ -53,11 +54,6 @@ class LoginController extends Controller {
       };
     }
     ctx.body = res;
-  }
-  async loginbybindtel() {
-    const body = this.ctx.request.body;
-    console.log(body);
-    this.ctx.body = {};
   }
 }
 module.exports = LoginController;

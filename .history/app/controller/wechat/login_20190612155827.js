@@ -54,10 +54,5 @@ class LoginController extends Controller {
     }
     ctx.body = res;
   }
-  async loginbybindtel() {
-    const body = this.ctx.request.body;
-    console.log(body);
-    this.ctx.body = {};
-  }
 }
 module.exports = LoginController;
