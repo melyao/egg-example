@@ -13,13 +13,13 @@ class LoginController extends Controller {
       dataType: 'json',
     });
     let res = {};
-    console.log("1:" + JSON.stringify(result));
+    // console.log("1:" + JSON.stringify(result));
     if (result.status === 200) {
       const openid = result.data.openid;
       const wx_userinfo = await this.app.mysql.get('wx_info', { openid });
       const userCacheId = ctx.helper.uuid();
       if (wx_userinfo === null || wx_userinfo === undefined) {
-        const info = await this.app.mysql.insert('wx_info', { openid, sessionKey: result.data.session_key, userCacheId });
+        const info = await this.app.mysql.insert('wx_info', { openid, sessionKey: result.data.session_key, unionid: result.data.unionid, userCacheId });
         if (info.affectedRows === 1) {
           res = {
             userCacheId,
@@ -60,33 +60,13 @@ class LoginController extends Controller {
     const wx_userinfo = await this.app.mysql.get('wx_info', { userCacheId: body.userCacheId });
     if(wx_userinfo) {
       const pc = new WXBizDataCrypt(this.config.wechat.appid, wx_userinfo.sessionKey);
+      console.log(pc, wx_userinfo.sessionKey);
       const data = pc.decryptData(body.encryptedData, body.iv);
       if (data) {
-        const row = await this.app.mysql.update('wx_info', {
-          nickName: data.nickName,
-          avatarUrl: data.avatarUrl,
-          province: data.province,
-          city: data.city,
-          country: data.country,
-          gender: data.gender,
-          language: data.language,
-        },
-        { where: { userCacheId: body.userCacheId } });
-        if (row.affectedRows === 1) {
-          this.ctx.body = {
-            retMsg: '操作成功',
-            retCode: '0000',
-          };
-        } else {
-          this.ctx.body = {
-            retMsg: '操作失败',
-            retCode: '0001',
-          };
-        }
-      } else {
         this.ctx.body = {
-          retMsg: '获取数据失败',
-          retCode: '0001',
+          retMsg: '操作成功',
+          retCode: '0000',
+          result: wx_userinfo,
         };
       }
     }

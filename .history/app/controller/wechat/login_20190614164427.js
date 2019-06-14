@@ -19,7 +19,7 @@ class LoginController extends Controller {
       const wx_userinfo = await this.app.mysql.get('wx_info', { openid });
       const userCacheId = ctx.helper.uuid();
       if (wx_userinfo === null || wx_userinfo === undefined) {
-        const info = await this.app.mysql.insert('wx_info', { openid, sessionKey: result.data.session_key, userCacheId });
+        const info = await this.app.mysql.insert('wx_info', { openid, sessionKey: result.data.session_key, unionid: result.data.unionid, userCacheId });
         if (info.affectedRows === 1) {
           res = {
             userCacheId,

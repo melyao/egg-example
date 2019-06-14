@@ -13,13 +13,13 @@ class LoginController extends Controller {
       dataType: 'json',
     });
     let res = {};
-    console.log("1:" + JSON.stringify(result));
+    // console.log("1:" + JSON.stringify(result));
     if (result.status === 200) {
       const openid = result.data.openid;
       const wx_userinfo = await this.app.mysql.get('wx_info', { openid });
       const userCacheId = ctx.helper.uuid();
       if (wx_userinfo === null || wx_userinfo === undefined) {
-        const info = await this.app.mysql.insert('wx_info', { openid, sessionKey: result.data.session_key, userCacheId });
+        const info = await this.app.mysql.insert('wx_info', { openid, sessionKey: result.data.session_key, unionid: result.data.unionid, userCacheId });
         if (info.affectedRows === 1) {
           res = {
             userCacheId,
